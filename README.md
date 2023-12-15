@@ -8,13 +8,12 @@ ScrapperData is a web scraping project that utilizes Selenium to collect data fr
 
 - `local_scraper.py`: Python script for local execution, scrapes data from avito.com.
 - `cloud_scraper.py`: Python script designed for cloud environments, also scrapes data from avito.com.
-- `requirements.txt`: Contains the necessary Python dependencies for the project.
 
 ## Local Scraper
 
 ### Prerequisites
 - Ensure you have Python installed on your local machine.
-- Install the required dependencies using the following command:
+- Install Selenium on your local machine or on your solution cloud.
 
 
 ### Usage
