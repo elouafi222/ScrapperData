@@ -1,18 +1,13 @@
-import csv
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-
-# sc-1x0vz2r-0 lnEFFR sc-1g3sn3w-13 gIuweS
-# sc-1x0vz2r-0 lnEFFR sc-1g3sn3w-13 czygWQ
-### premier cas ######
-# Chemin du pilote
-path = "C:\\Program Files (x86)\\chromedriver.exe"
+#
+path = "/usr/lib/chromium-browser/chromedriver"
 
 # Options du navigateur
 chrome_options = Options()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument(f"executable_path={path}")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--disable-dve-shm-uage")
 
 
 def creeAppartement(itemsType, itemsValue, icon, prix, nbrColome=10):
@@ -112,26 +107,18 @@ with open("meuble1.csv", mode="w", newline="", encoding="utf-8") as csv_file:
         ]
     )
 
-    with webdriver.Chrome(options=chrome_options) as driver:
-        driver.get("https://www.avito.ma/fr/casablanca/appartements-%C3%A0_vendre?o=1")
-        liens = driver.find_elements(By.CSS_SELECTOR, "a.sc-1jge648-0.eTbzNs")
-        for lien in liens:
-            # print(lien.get_attribute("href"))
-            scrape_data_from_page(lien.get_attribute("href"), csv_writer)
+    nombreDePage = 279
+    for i in range(0, nombreDePage):
+        try:
+            print(i)
+            with webdriver.Chrome(options=chrome_options) as driver:
+                driver.get(
+                    f"https://www.avito.ma/fr/casablanca/appartements-%C3%A0_vendre?o={i}"
+                )
+                liens = driver.find_elements(By.CSS_SELECTOR, "a.sc-1jge648-0.eTbzNs")
+                for lien in liens:
+                    # print(lien.get_attribute("href"))
+                    scrape_data_from_page(lien.get_attribute("href"), csv_writer)
 
-    """
-    path = "https://www.avito.ma/fr/sidi_bernoussi/appartements/Appartement_%C3%A0_vendre_81_m%C2%B2_%C3%A0_Casablanca_53843087.htm"
-    path2 = "https://www.avito.ma/fr/ben_ejdia/appartements/Appartement_ensoleill%C3%A9_au_coeur_de_Casablanca__53441952.htm"
-    path3 = "https://www.avito.ma/fr/maarif/appartements/STUDIO_38M_A_VENDRE_A_QUARTIER_MAARIF__54209364.htm"
-    data_row = creeAppartement(
-                items,
-                items2,
-                SalleDeBainId,
-                SurfaceTotaleTitleID,
-                ChambresTitleID,
-                valeurIcon,
-                prix,
-            )
-
-            csv_writer.writerow(data_row)
-    """
+        except Exception as e:
+            print(f"erreur dans le chemain {path}: {e}")
